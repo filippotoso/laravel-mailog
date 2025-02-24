@@ -1,46 +1,62 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "filippo-toso/laravel-mailog",
+    "description": "Log your emails to the database and view them in a simple web interface",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "filippotoso",
+        "laravel-mailog"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/filippotoso/laravel-mailog",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Filippo Toso",
+            "email": "filippo.toso@creativepark.it",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": ">=8.1",
+        "spatie/laravel-package-tools": "^1.16",
+        "illuminate/contracts": ">=9.0",
+        "illuminate/config": ">=9.0",
+        "illuminate/mail": ">=9.0",
+        "illuminate/database": ">=9.0",
+        "illuminate/http": ">=9.0",
+        "illuminate/console": ">=9.0",
+        "illuminate/view": ">=9.0"
     },
     "require-dev": {
-        :require_dev_testing,
-        :require_dev_codestyle,
+        "pestphp/pest": "^3.0",
+        "laravel/pint": "^1.0",
         "spatie/ray": "^1.28"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "FilippoToso\\LaravelMailog\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "FilippoToso\\LaravelMailog\\Tests\\": "tests"
         }
     },
     "scripts": {
-        :scripts_testing,
-        :scripts_codestyle
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            :plugins_testing,
+            "pestphp/pest-plugin": true,
             "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "FilippoToso\\LaravelMailog\\ServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
