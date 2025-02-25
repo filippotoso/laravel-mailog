@@ -2,9 +2,11 @@
 
 namespace FilippoToso\LaravelMailog;
 
+use Illuminate\Support\Facades\Event;
 use FilippoToso\LaravelMailog\Commands\PurgeMessages;
-use FilippoToso\LaravelMailog\Support\Connection;
+use FilippoToso\LaravelMailog\Listeners\LogMessageSent;
 use FilippoToso\LaravelMailog\Transport\MailogTransport;
+use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 use Spatie\LaravelPackageTools\Package;
@@ -38,5 +40,13 @@ class ServiceProvider extends PackageServiceProvider
         Mail::extend('mailog', function (array $config = []) {
             return new MailogTransport();
         });
+
+        // Register the event listener
+        if (Config::get('mailog.listen')) {
+            Event::listen(
+                MessageSent::class,
+                LogMessageSent::class,
+            );
+        }
     }
 }

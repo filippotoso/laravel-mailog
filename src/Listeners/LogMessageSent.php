@@ -36,7 +36,7 @@ class LogMessageSent implements ShouldQueue
      */
     public function handle(MessageSent $event)
     {
-        $class = Config::get('mail.transport');
+        $class = Config::get('mailog.transport');
 
         (new $class($this->dispatcher, $this->logger))->listen($event->message);
     }

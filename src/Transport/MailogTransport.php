@@ -20,25 +20,36 @@ class MailogTransport extends AbstractTransport
     /**
      * This method is called from the LogMessageSent listener
      *
-     * @param SentMessage $message
+     * @param Email $email
      * @return void
      */
-    public function listen(SentMessage $message): void
+    public function listen(Email $email): void
     {
-        $this->doSend($message);
+        $this->logEmail($email);
     }
 
     /**
-     * Store the message in the database
+     * Receive the sent message
      *
      * @param SentMessage $sentMessage
      * @return void
      */
     protected function doSend(SentMessage $sentMessage): void
     {
-        $convertedEmail = MessageConverter::toEmail($sentMessage->getOriginalMessage());
+        $email = MessageConverter::toEmail($sentMessage->getOriginalMessage());
 
-        $subject = $convertedEmail->getSubject();
+        $this->logEmail($email);
+    }
+
+    /**
+     * Store the message in the database
+     *
+     * @param Email $email
+     * @return void
+     */
+    protected function logEmail(Email $email)
+    {
+        $subject = $email->getSubject();
 
         foreach (Config::get('mailog.excluded') as $pattern) {
             if (preg_match($pattern, $subject)) {
@@ -46,12 +57,12 @@ class MailogTransport extends AbstractTransport
             }
         }
 
-        $messageId = $convertedEmail->generateMessageId();
+        $messageId = $email->generateMessageId();
 
         /** @disregard P1009 Undefined type */
-        $message = Message::create($this->messageData($messageId, $convertedEmail));
+        $message = Message::create($this->messageData($messageId, $email));
 
-        foreach ($convertedEmail->getAttachments() as $attachment) {
+        foreach ($email->getAttachments() as $attachment) {
             $message->attachments()->create($this->attachmendData($messageId, $attachment));
         }
 
@@ -66,7 +77,7 @@ class MailogTransport extends AbstractTransport
 
         /** @var MessageAddressType $type */
         foreach ($mapping as $method => $type) {
-            $addresses = call_user_func([$convertedEmail, $method]);
+            $addresses = call_user_func([$email, $method]);
 
             // Handle Return Path exception
             if (is_null($addresses)) {

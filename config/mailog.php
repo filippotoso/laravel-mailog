@@ -60,5 +60,5 @@ return [
      * If set to true, the package will listen for the MessageSent event and log the emails
      * You should enable this only if you are not using mailog as transport in your mail configuration
      */
-    'listen' => false,
+    'listen' => env('MAILOG_LISTEN', false),
 ];
