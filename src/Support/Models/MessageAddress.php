@@ -6,6 +6,18 @@ use Illuminate\Support\Facades\Config;
 use FilippoToso\LaravelMailog\Enums\MessageAddressType;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Message Address Model
+ * 
+ * @property int $id
+ * @property int $message_id
+ * @property MessageAddressType $type
+ * @property string $address
+ * @property mixed $name
+ * @property string $domain
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class MessageAddress extends Model
 {
     /**

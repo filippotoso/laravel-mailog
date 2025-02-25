@@ -3,9 +3,20 @@
 namespace FilippoToso\LaravelMailog\Support\Models;
 
 use Illuminate\Support\Facades\Config;
-use FilippoToso\LaravelMailog\Enums\MessageAddressType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+
+/**
+ * Message Attachment Model
+ * 
+ * @property int $id
+ * @property int $message_id
+ * @property string $filename
+ * @property int $size
+ * @property string $path
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 
 class MessageAttachment extends Model
 {

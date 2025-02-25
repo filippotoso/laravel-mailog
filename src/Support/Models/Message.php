@@ -2,12 +2,25 @@
 
 namespace FilippoToso\LaravelMailog\Support\Models;
 
+use FilippoToso\LaravelMailog\Enums\MessageAddressType;
 use FilippoToso\LaravelMailog\Models\MessageAttachment;
 use FilippoToso\LaravelMailog\Support\Models\MessageAttachment as ModelsMessageAttachment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Message Model
+ * 
+ * @property int $id
+ * @property \Carbon\Carbon $date
+ * @property string $path
+ * @property string $subject
+ * @property string $text
+ * @property string $html
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Message extends Model
 {
     /**
@@ -50,6 +63,66 @@ class Message extends Model
     }
 
     /**
+     * The fromAddresses relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function fromAddresses()
+    {
+        return $this->addresses()->where('type', '=', MessageAddressType::From);
+    }
+
+    /**
+     * The toAddresses relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function toAddresses()
+    {
+        return $this->addresses()->where('type', '=', MessageAddressType::To);
+    }
+
+    /**
+     * The ccAddresses relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ccAddresses()
+    {
+        return $this->addresses()->where('type', '=', MessageAddressType::Cc);
+    }
+
+    /**
+     * The bccAddresses relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function bccAddresses()
+    {
+        return $this->addresses()->where('type', '=', MessageAddressType::Bcc);
+    }
+
+    /**
+     * The returnPathAddresses relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function returnPathAddresses()
+    {
+        return $this->addresses()->where('type', '=', MessageAddressType::ReturnPath);
+    }
+
+    /**
+     * The replyToAddresses relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replyToAddresses()
+    {
+        return $this->addresses()->where('type', '=', MessageAddressType::ReplyTo);
+    }
+
+    /**
      * The attachments relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -85,12 +158,7 @@ class Message extends Model
     protected static function booted(): void
     {
         static::deleting(function (Message $message) {
-            Storage::disk(Config::get('mailog.filesystem.disk'))->delete($message->path);
-
-            /** @disregard P1009 Undefined type */
-            $message->attachments->each(function (MessageAttachment $attachment) {
-                $attachment->delete();
-            });
+            Storage::disk(Config::get('mailog.filesystem.disk'))->deleteDirectory(dirname($message->path));
         });
     }
 }

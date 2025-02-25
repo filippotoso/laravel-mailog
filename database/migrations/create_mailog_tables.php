@@ -31,6 +31,7 @@ return new class extends Migration
             $table->text('name')->nullable();
             $table->timestamps();
 
+            $table->index(['message_id', 'type'], 'type_idx');
             $table->index(['message_id', 'address', 'type'], 'address_idx');
             $table->index(['message_id', 'domain', 'type'], 'domain_idx');
             $table->index(['message_id', 'name', 'type'], 'name_idx');
