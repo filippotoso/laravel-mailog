@@ -32,9 +32,9 @@ class ServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         // This allows to use the models defined in the configuration file within the web ui controllers
-        class_alias(Config::get('mailog.models.messages'), 'FilippoToso\LaravelMailog\Models\Message');
-        class_alias(Config::get('mailog.models.message_addresses'), 'FilippoToso\LaravelMailog\Models\MessageAddress');
-        class_alias(Config::get('mailog.models.message_attachments'), 'FilippoToso\LaravelMailog\Models\MessageAttachment');
+        $this->aliasClass(Config::get('mailog.models.messages'), 'FilippoToso\LaravelMailog\Models\Message');
+        $this->aliasClass(Config::get('mailog.models.message_addresses'), 'FilippoToso\LaravelMailog\Models\MessageAddress');
+        $this->aliasClass(Config::get('mailog.models.message_attachments'), 'FilippoToso\LaravelMailog\Models\MessageAttachment');
 
         // Register the transport driver
         Mail::extend('mailog', function (array $config = []) {
@@ -47,6 +47,13 @@ class ServiceProvider extends PackageServiceProvider
                 MessageSent::class,
                 LogMessageSent::class,
             );
+        }
+    }
+
+    protected function aliasClass($from, $to)
+    {
+        if (!class_exists($to)) {
+            class_alias($from, $to);
         }
     }
 }
