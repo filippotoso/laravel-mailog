@@ -76,10 +76,14 @@ php artisan vendor:publish --tag="mailog-views"
 You can also override the `FilippoToso\LaravelMailog\Http\Controllers\MessageController` class and change its behaviour. For instance you could add a filter for your tenant:
 
 ```php
-use FilippoToso\LaravelMailog\Http\Controllers\MessageController;
+use FilippoToso\LaravelMailog\Http\Controllers\Concerns\IsMailogController;
 
-class MailogMessageController extends MessageController 
+class MailogMessageController extends Controller
 {
+    use IsMailogController {
+        query as mailogQuery;
+    }
+
     /**
      * The query that filters the messages
      *
@@ -87,7 +91,7 @@ class MailogMessageController extends MessageController
      * @return Builder
      */
     protected function query(array $filters) {
-        return parent::query()
+        return parent::mailogQuery()
             ->where('tenant_id','=', tenant('id'));
     }
 }
