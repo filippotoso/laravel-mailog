@@ -31,7 +31,7 @@ class LogMessageSent implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  App\Events\MessageSent  $event
+     * @param Illuminate\Mail\Events\MessageSent $event
      * @return void
      */
     public function handle(MessageSent $event)
