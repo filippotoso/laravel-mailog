@@ -4,6 +4,14 @@ This package allows you to store all your application outgoing email into a data
 
 You can use it as a mail transport (no email is delivered) or as an event listener (all emails are delivered normally but also logged into the database).
 
+# Why does this exist?
+
+Maybe you are asking yourself why I built this package when there's the [log driver](https://laravel.com/docs/12.x/mail#log-driver) or services like [Mailtrap](https://mailtrap.io/), etc.
+
+I work with a lot of institutional customers (banks, public bodies, you name it...). 
+These customers are very picky about where their data is stored (ie. Are Mailtrap data centers in the EU? How are they secured? Who has access to them? And the list goes on, and on, and on...). 
+This package offers a self-hosted solution that works perfectly in both test and production environments and meets their stringent requirements.
+
 ## Installation
 
 Install the package using composer:
