@@ -65,11 +65,11 @@ trait IsMailogController
                         $query->where('address',  'LIKE', "%{$search}%");
                     });
             })
-            ->when(Carbon::hasFormat($filters['from'], $this->filterDateFormat), function (Builder $query, $filters) {
+            ->when(Carbon::hasFormat((string)$filters['from'], $this->filterDateFormat), function (Builder $query, $filters) {
                 $date = Carbon::createFromFormat($this->filterDateFormat, $filters['from'])->format($this->databaseDateFormat);
                 return $query->where('date', '>=', $date);
             })
-            ->when(Carbon::hasFormat($filters['to'], $this->filterDateFormat), function (Builder $query, $filters) {
+            ->when(Carbon::hasFormat((string)$filters['to'], $this->filterDateFormat), function (Builder $query, $filters) {
                 $date = Carbon::createFromFormat($this->filterDateFormat, $filters['to'])->format($this->databaseDateFormat);
                 return $query->where('to', '>=', $date);
             })
