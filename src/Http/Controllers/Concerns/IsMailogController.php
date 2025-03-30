@@ -65,13 +65,13 @@ trait IsMailogController
                         $query->where('address',  'LIKE', "%{$search}%");
                     });
             })
-            ->when(Carbon::hasFormat((string)$filters['from'], $this->filterDateFormat), function (Builder $query, $filters) {
+            ->when(Carbon::hasFormat((string)$filters['from'], $this->filterDateFormat), function (Builder $query) use ($filters) {
                 $date = Carbon::createFromFormat($this->filterDateFormat, $filters['from'])->format($this->databaseDateFormat);
                 return $query->where('date', '>=', $date);
             })
-            ->when(Carbon::hasFormat((string)$filters['to'], $this->filterDateFormat), function (Builder $query, $filters) {
+            ->when(Carbon::hasFormat((string)$filters['to'], $this->filterDateFormat), function (Builder $query) use ($filters) {
                 $date = Carbon::createFromFormat($this->filterDateFormat, $filters['to'])->format($this->databaseDateFormat);
-                return $query->where('to', '>=', $date);
+                return $query->where('date', '>=', $date);
             })
             ->withCount('attachments')
             ->orderBy('date', 'desc');
