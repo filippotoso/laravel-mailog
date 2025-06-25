@@ -28,7 +28,7 @@ trait IsMailogController
         $filters = $this->filters($request);
         $query = $this->query($filters);
 
-        $messages = $query->paginate();
+        $messages = $query->paginate()->appends($filters);
 
         return view('mailog::messages.index', [
             'messages' => $messages,
