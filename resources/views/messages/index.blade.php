@@ -25,6 +25,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">From</th>
                                 <th scope="col">To</th>
                                 <th scope="col">Subject</th>
@@ -35,12 +36,13 @@
                         <tbody>
                             @if ($messages->isEmpty())
                                 <tr>
-                                    <td colspan="6" class="text-center">No mail logged yet.</td>
+                                    <td colspan="7" class="text-center">No mail logged yet.</td>
                                 </tr>
                             @else
                                 @foreach ($messages as $message)
                                     <tr>
                                         <td>{{ $message->id }}</td>
+                                        <td>{{ $message->date->format('Y-m-d H:i:s') }}</td>
                                         <td>{{ $message->fromAddresses->pluck('address')->join(', ') }}</td>
                                         <td>{{ $message->toAddresses->pluck('address')->join(', ') }}</td>
                                         <td>{{ $message->subject }}</td>

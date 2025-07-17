@@ -71,7 +71,7 @@ trait IsMailogController
             })
             ->when(Carbon::hasFormat((string)$filters['to'], $this->filterDateFormat), function (Builder $query) use ($filters) {
                 $date = Carbon::createFromFormat($this->filterDateFormat, $filters['to'])->format($this->databaseDateFormat);
-                return $query->where('date', '>=', $date);
+                return $query->where('date', '<=', $date);
             })
             ->withCount('attachments')
             ->orderBy('date', 'desc');
